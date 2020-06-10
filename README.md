@@ -9,6 +9,8 @@ wireless device such as the volume and which device to stream too. Jackcast has
 no concept or control of where the line-in audio is coming from which is why
 there are no controls to play, pause and change the track.
 
+Initial motivation [video](https://youtu.be/4KiZJvDQa0I) and demo.
+
 This project is stable but a work in progress.
 
 ![Jackcast browser](https://github.com/wil3/jackcast/blob/master/.github/images/app-desktop.png)
