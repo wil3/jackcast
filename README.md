@@ -5,7 +5,7 @@ old sound systems.
 
 This project is stable but a work in progress.
 
-![Jackcast browser]()
+![Jackcast browser](https://github.com/wil3/jackcast/blob/master/.github/images/app-desktop.png)
 
 ## Supported Devices
 * Sonos
@@ -30,8 +30,9 @@ to install Ubuntu Server 20.04
   [https://raspberrypi.stackexchange.com/a/111787/120469](instructions).
 * Install the dependencies,
 ```
-wget 
-sudo platforms/ubuntu/install.sh
+wget https://raw.githubusercontent.com/wil3/jackcast/master/platforms/ubuntu/install.sh .
+chmod +x install.sh
+sudo install.sh
 ```
 * Clone the repo and install Jackcast
 ```
@@ -76,6 +77,7 @@ domain via mDNS on Android 6. In this case you need to access by IP address.
 ## Sample Parts List 
 
 | Price | Item |
+| ------| -----|
 | $35.00 | [Raspberry Pi 4 2GB](https://www.microcenter.com/product/621439/raspberry-pi-4-model-b---2gb-ddr4)|
 | $4.49  | [Micro Center 32GB microSDHC Class 10 Flash Memory Card](https://www.microcenter.com/product/485584/micro-center-32gb-microsdhc-class-10-flash-memory-card) | 
 | $7.99  | [Raspberry Pi 4 Official 15W Power Supply](https://www.microcenter.com/product/608170/raspberry-pi-4-official-15w-power-supply-us---black) | 
