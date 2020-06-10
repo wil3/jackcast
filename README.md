@@ -3,6 +3,12 @@ Jackcast is a device used to stream/cast line-in (auxiliary input) audio to a
 wireless device. Use this device to cast audio from a record player or other
 old sound systems. 
 
+This software is intended to run on a computer like a Raspberry Pi that can be
+permanently connected to the audio device. Jackcast includes a webapp to control the
+wireless device such as the volume and which device to stream too. Jackcast has
+no concept or control of where the line-in audio is coming from which is why
+there are no controls to play, pause and change the track.
+
 This project is stable but a work in progress.
 
 ![Jackcast browser](https://github.com/wil3/jackcast/blob/master/.github/images/app-desktop.png)
