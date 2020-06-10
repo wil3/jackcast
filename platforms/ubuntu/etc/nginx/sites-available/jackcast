@@ -1,0 +1,9 @@
+server {
+    listen 80 default_server;
+	server_name _;
+
+    location / {
+        include uwsgi_params;
+        proxy_pass http://unix:/tmp/jackcast.sock;
+    }
+}

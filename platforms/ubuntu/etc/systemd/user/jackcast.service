@@ -1,0 +1,15 @@
+[Unit]
+Description=uWSGI instance to serve Jackcast
+After=network.target
+After=pulseaudio.service
+Requires=pulseaudio.service
+
+[Service]
+WorkingDirectory=/srv/www/jackcast
+Environment="PATH=/srv/www/jackcast/env/bin:/usr/bin"
+# Allow gunicorn to log python print statements to journal which is helpful for debugging
+Environment=PYTHONUNBUFFERED=TRUE
+ExecStart=/srv/www/jackcast/env/bin/gunicorn wsgi:app -c /srv/www/jackcast/platforms/ubuntu/gunicorn.conf.py 
+
+[Install]
+WantedBy=default.target

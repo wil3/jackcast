@@ -1,0 +1,85 @@
+body {
+    text-align: center;
+    background-color: #404040; 
+    color: white;
+    height: 100%;
+    margin: 0;
+}
+label {
+    color: white;
+}
+
+.devices,
+.volume-wrap {
+    margin: 0 auto;
+    display: inline-block;
+    overflow: hidden;
+}
+
+.volume-wrap {
+    height: 60px;
+    width: 300px;
+}
+
+#devices {
+    text-align: left;
+}
+
+li {
+    padding: 10px 0;
+}
+
+#volume-btn {
+    padding-left: 0px;
+    padding-right: 20px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+}
+
+.volume-wrap {}
+
+.content {
+    padding:10px;
+}
+nav {
+    background-color: transparent !important;
+}
+.nav-wrapper {
+    background-color: none;
+}
+
+.noUi-horizontal {
+    height: 3px;
+
+}
+
+.noUi-connect {
+    background: #ff01c8;
+}
+
+.noUi-horizontal .noUi-handle,
+.noUi-vertical .noUi-handle {
+    background: #ff01c8;
+}
+
+.noUi-target.noUi-horizontal .noUi-tooltip {
+    background-color:#ff01c8;
+}
+
+/* This is the slider background */
+.noUi-target {
+    background-color: #666666;
+}
+/* This is the switch background color when enabled */
+.switch label input[type="checkbox"]:checked + .lever {
+    background:#b30089;
+}
+/* This is the switch knob */
+.switch label input[type="checkbox"]:checked + .lever::after {
+    background:#ff01c8;
+}
+
+/* Controls the color of the volume button */
+.btn-flat {
+    color: white;
+}
