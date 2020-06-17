@@ -50,6 +50,7 @@ git clone https://github.com/wil3/jackcast.git
 cd jackcast
 python3 -m venv env
 source env/bin/activate
+pip3 install wheel # Is needed by gevent
 pip3 install .
 ```
 * Configure Nginx
