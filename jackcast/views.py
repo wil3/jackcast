@@ -20,19 +20,15 @@ def speakers():
     Once a speaker is set start playing audio on it"""
     if request.method == 'POST':
         devices = request.form.getlist('devices[]')
-        print (devices)
 
-        if len(devices) == 1:
+        if len(devices) > 0:
             # no grouping just play on that speaker
-            jc.speaker.set_active(devices[0])
+            jc.speaker.set_active(devices)
             jc.speaker.set_volume(jc.volume)
             jc.speaker.play()
-        elif len(devices) == 0:
-            jc.speaker.stop()
-            jc.speaker.set_active(None)
         else:
-            # If grouping of devices is allowed on this network play them all
-            pass
+            jc.speaker.stop()
+            jc.speaker.set_active([])
 
         return jsonify({'success': True, 'device': {'volume':jc.speaker.volume}})
     else:
