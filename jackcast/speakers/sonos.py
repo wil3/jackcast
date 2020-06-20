@@ -86,7 +86,7 @@ class Sonos(AudioNetwork):
     @property
     def volume(self):
         if self.coordinator:
-            return self.coordinator.volume
+            return self.coordinator.group.volume
         else:
             return 0
 
