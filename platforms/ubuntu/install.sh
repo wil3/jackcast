@@ -30,8 +30,7 @@ hostnamectl set-hostname jackcast
 apt-get install -y avahi-daemon
 
 
-apt install -y nginx\
-    uwsgi
+apt install -y nginx
 
 apt install -y\
     build-essential\
@@ -43,4 +42,10 @@ apt install -y\
 
 # Allow HTTP traffic
 ufw allow 'Nginx HTTP'
+
+# Since PulseAudio and Jackcast are running as a user service
+# we need to make sure the services start on boot. We can do this
+# by enable linger per this document,
+# https://wiki.archlinux.org/index.php/Systemd/User#Automatic_start-up_of_systemd_user_instances
+loginctl enable-linger $USER
 
