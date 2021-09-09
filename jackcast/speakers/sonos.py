@@ -63,13 +63,17 @@ class Sonos(AudioNetwork):
         self.coordinator = None
 
         # Init an active speaker
-        devices = soco.discover()
+        devices = []
+        discovered_devices = soco.discover()
+        if discovered_devices is not None:
+          devices.extend(discovered_devices)
+
         for device in devices:
-            info = device.get_current_transport_info()
-            # TODO (wfk) check if there are more than one then find the
-            # coordinator
-            if info['current_transport_state'] == 'PLAYING':
-                self.coordinator = device
+          info = device.get_current_transport_info()
+          # TODO (wfk) check if there are more than one then find the
+          # coordinator
+          if info['current_transport_state'] == 'PLAYING':
+            self.coordinator = device
 
     def get_ip_addr(self):
         # TODO (wfk) do the devices use mDNS? If so we can just use our hostname.
@@ -95,16 +99,22 @@ class Sonos(AudioNetwork):
         connection""" 
 
         speakers = []
-        for device in soco.discover():
-            info = device.get_current_transport_info()
-            if info['current_transport_state'] == 'PLAYING':
-                status = Speaker.STATUS_PLAYING
-            else:
-                status = Speaker.STATUS_STOPPED
-            speaker = Speaker(device.player_name, device.volume, status)
-            speakers.append(speaker)
+         # Init an active speaker
+        devices = []
+        discovered_devices = soco.discover()
+        if discovered_devices is not None:
+          devices.extend(discovered_devices)
 
-            self._log_device(device)
+        for device in devices:
+          info = device.get_current_transport_info()
+          if info['current_transport_state'] == 'PLAYING':
+              status = Speaker.STATUS_PLAYING
+          else:
+              status = Speaker.STATUS_STOPPED
+          speaker = Speaker(device.player_name, device.volume, status)
+          speakers.append(speaker)
+
+          self._log_device(device)
 
         return speakers
 
