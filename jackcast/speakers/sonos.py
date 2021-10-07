@@ -9,7 +9,7 @@ log.setLevel(logging.DEBUG)
 
 handler = logging.StreamHandler(sys.stdout)
 handler.setLevel(logging.DEBUG)
-# We don't need a timestamp because this is provided by the gunicorn 
+# We don't need a timestamp because this is provided by the gunicorn
 # logger.
 formatter = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
 handler.setFormatter(formatter)
@@ -36,7 +36,7 @@ def gen_audio():
     parec = subprocess.Popen(['parec', '--format=s16le', '-d', monitor_name],
                              stdout=subprocess.PIPE)
     # Encode the raw audio recording to mp3 and output to stdout
-    lame = subprocess.Popen(['lame', '-b', '192', '-r', '-'], 
+    lame = subprocess.Popen(['lame', '-b', '192', '-r', '-'],
                             stdin=parec.stdout, stdout=subprocess.PIPE)
     buf_size = 8192
     while True:
@@ -57,19 +57,20 @@ class Sonos(AudioNetwork):
             facing web server port.
         """
 
-        self.uri ='x-rincon-mp3radio://{}:{}/cast'.format(self.get_ip_addr(), server_port) 
+        self.uri ='x-rincon-mp3radio://{}:{}/cast'.format(self.get_ip_addr(), server_port)
         # The coordinator is the speaker we communicate with. If there is a
-        # group it will forward the request to the other speakers. 
+        # group it will forward the request to the other speakers.
         self.coordinator = None
 
         # Init an active speaker
         devices = soco.discover()
-        for device in devices:
-            info = device.get_current_transport_info()
-            # TODO (wfk) check if there are more than one then find the
-            # coordinator
-            if info['current_transport_state'] == 'PLAYING':
-                self.coordinator = device
+        if devices:
+            for device in devices:
+                info = device.get_current_transport_info()
+                # TODO (wfk) check if there are more than one then find the
+                # coordinator
+                if info['current_transport_state'] == 'PLAYING':
+                    self.coordinator = device
 
     def get_ip_addr(self):
         # TODO (wfk) do the devices use mDNS? If so we can just use our hostname.
@@ -92,25 +93,27 @@ class Sonos(AudioNetwork):
 
     def speakers(self):
         """Return list of all available devices associated with this audio
-        connection""" 
+        connection"""
 
         speakers = []
-        for device in soco.discover():
-            info = device.get_current_transport_info()
-            if info['current_transport_state'] == 'PLAYING':
-                status = Speaker.STATUS_PLAYING
-            else:
-                status = Speaker.STATUS_STOPPED
-            speaker = Speaker(device.player_name, device.volume, status)
-            speakers.append(speaker)
+        devices = soco.discover()
+        if devices:
+            for device in soco.discover():
+                info = device.get_current_transport_info()
+                if info['current_transport_state'] == 'PLAYING':
+                    status = Speaker.STATUS_PLAYING
+                else:
+                    status = Speaker.STATUS_STOPPED
+                speaker = Speaker(device.player_name, device.volume, status)
+                speakers.append(speaker)
 
-            self._log_device(device)
+                self._log_device(device)
 
         return speakers
 
     def set_active(self, device_names):
         """Set the device names as active
-        
+
         Args:
             names: A list of device names to set active.
         """
