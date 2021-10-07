@@ -1,7 +1,7 @@
 import socket
 import subprocess
 
-from flask import Blueprint
+from flask import Blueprint, Response
 
 
 class AudioNetwork:
@@ -43,6 +43,11 @@ class Speaker:
 
 
 speaker_app = Blueprint('speaker_app', __name__)
+
+
+@speaker_app.route('/cast')
+def cast():
+    return Response(gen_audio(), mimetype='audio/mpeg')
 
 
 def gen_audio():
