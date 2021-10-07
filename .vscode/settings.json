@@ -1,0 +1,24 @@
+{
+    "python.formatting.provider": "autopep8",
+    "python.linting.pylamaEnabled": true,
+    "python.linting.pylamaArgs": ["--options", ".vscode/pylama.ini"],
+    "editor.tabSize": 4,
+    "[python]": {
+        "editor.insertSpaces": true,
+        "editor.rulers": [
+            120
+        ],
+        "editor.detectIndentation": true,
+        "files.trimTrailingWhitespace": true,
+    },
+    "python.sortImports.args": ["-l", "120"],
+    // When opening a file, `editor.tabSize` and `editor.insertSpaces` will be detected based on the file contents.
+    "files.autoSave": "off",
+    "files.exclude": {
+        "**/*.pyc": true,
+        "**/*.swp": true,
+        "**/__pycache__": true
+    },
+    "python.linting.pylintEnabled": false,
+    "python.linting.enabled": true
+}

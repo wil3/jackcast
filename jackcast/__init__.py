@@ -1,5 +1,8 @@
 from flask import Flask
-from jackcast.speakers.sonos import sonos_app, Sonos
+
+from jackcast.speakers import speaker_app
+from jackcast.speakers.sonos import Sonos
+
 
 class JackcastCtl:
     """The intent of this class is to be the master controller for Jackcast.
@@ -10,10 +13,11 @@ class JackcastCtl:
         # The currently active speaker implementing a AudioNetwork class
         self.speaker = None
 
+
 jc = JackcastCtl()
 jc.speaker = Sonos(80)
 app = Flask(__name__)
-app.register_blueprint(sonos_app)
+app.register_blueprint(speaker_app)
 
-import jackcast.views
 
+import jackcast.views # noqa

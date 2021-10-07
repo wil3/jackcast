@@ -1,50 +1,9 @@
-import socket
-import os
-import subprocess
-import functools
-import sys
-import logging
-log = logging.getLogger('jackcast')
-log.setLevel(logging.DEBUG)
-
-handler = logging.StreamHandler(sys.stdout)
-handler.setLevel(logging.DEBUG)
-# We don't need a timestamp because this is provided by the gunicorn
-# logger.
-formatter = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
-handler.setFormatter(formatter)
-log.addHandler(handler)
-
-from flask import Response, Blueprint
 import soco
-
+from jackcast.logger import jackcast_logger
 from jackcast.speakers import AudioNetwork, Speaker
 
-sonos_app = Blueprint('sonos_app', __name__)
+log = jackcast_logger.get_logger(__name__)
 
-def gen_audio():
-    # The following will proxy the null sink to the network
-    # This strategy was obtained from the following resources,
-    # * https://askubuntu.com/questions/60837/record-a-programs-output-with-
-    # pulseaudio
-    # * mkchromecast
-
-    # Pulseaudio names the monitor after the module name appended with
-    # '.monitor'.
-    monitor_name = "{}.monitor".format('Jackcast')
-    # Record raw audio coming from the monitoring sink and output to stdout
-    parec = subprocess.Popen(['parec', '--format=s16le', '-d', monitor_name],
-                             stdout=subprocess.PIPE)
-    # Encode the raw audio recording to mp3 and output to stdout
-    lame = subprocess.Popen(['lame', '-b', '192', '-r', '-'],
-                            stdin=parec.stdout, stdout=subprocess.PIPE)
-    buf_size = 8192
-    while True:
-        yield lame.stdout.read(buf_size)
-
-@sonos_app.route('/cast')
-def cast():
-    return Response(gen_audio(), mimetype='audio/mpeg')
 
 class Sonos(AudioNetwork):
     """With sonos we can have multiple speakers playing"""
@@ -57,7 +16,7 @@ class Sonos(AudioNetwork):
             facing web server port.
         """
 
-        self.uri ='x-rincon-mp3radio://{}:{}/cast'.format(self.get_ip_addr(), server_port)
+        self.uri = 'x-rincon-mp3radio://{}:{}/cast'.format(self.get_ip_addr, server_port)
         # The coordinator is the speaker we communicate with. If there is a
         # group it will forward the request to the other speakers.
         self.coordinator = None
@@ -71,14 +30,6 @@ class Sonos(AudioNetwork):
                 # coordinator
                 if info['current_transport_state'] == 'PLAYING':
                     self.coordinator = device
-
-    def get_ip_addr(self):
-        # TODO (wfk) do the devices use mDNS? If so we can just use our hostname.
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(("8.8.8.8", 80))
-        ip_addr = s.getsockname()[0]
-        s.close()
-        return ip_addr
 
     def set_volume(self, volume):
         if self.coordinator:
