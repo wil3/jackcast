@@ -1,13 +1,7 @@
 # Jackcast
-Jackcast is a device used to stream/cast line-in (auxiliary input) audio to a
-wireless device. Use this device to cast audio from a record player or other
-old sound systems. 
+Jackcast is a device used to stream/cast line-in (auxiliary input) audio to a wireless device. Use this device to cast audio from a record player or other old sound systems. 
 
-This software is intended to run on a computer like a Raspberry Pi that can be
-permanently connected to the audio device. Jackcast includes a webapp to control the
-wireless device such as the volume and which device to stream too. Jackcast has
-no concept or control of where the line-in audio is coming from which is why
-there are no controls to play, pause and change the track.
+This software is intended to run on a computer like a Raspberry Pi that can be permanently connected to the audio device. Jackcast includes a webapp to control the wireless device such as the volume and which device to stream too. Jackcast has no concept or control of where the line-in audio is coming from which is why there are no controls to play, pause and change the track.
 
 Initial motivation [video](https://youtu.be/4KiZJvDQa0I) and demo.
 
@@ -27,55 +21,33 @@ but a number are still manual. The following assume you don't have
 an extra keyboard/mouse/monitor. It may be easier to setup if you have these
 devices. Please report any issues with these instructions.
 
-* Use the [Raspberry Pi
-  Imager](https://www.raspberrypi.org/documentation/installation/installing-images/)
-to install Ubuntu Server 20.04
-* [Enable SSH on a headless Raspberry PI](https://www.raspberrypi.org/documentation/remote-access/ssh/)
- by placing a file named `ssh` in the boot partition of the SD card.
+* Use the [Raspberry Pi Imager](https://www.raspberrypi.org/documentation/installation/installing-images/) to install Ubuntu Server 20.04 (tested with 32bit version)
+
+  ![Ubuntu version](https://github.com/wil3/jackcast/blob/master/.github/images/ubuntu-version.png)
+
+* [Enable SSH on a headless Raspberry PI](https://www.raspberrypi.org/documentation/remote-access/ssh/) by placing a file named `ssh` in the boot partition of the SD card.
+
 * Connect the Raspberry Pi to an ethernet port on your router.
+
 * Log into using the default username `ubuntu` and password `ubuntu`.
-* Configure wifi following these
-  [https://raspberrypi.stackexchange.com/a/111787/120469](instructions).
-* Install the dependencies,
+
+* Configure wifi following these [Enable WIFI on Ubuntu 20.04](https://raspberrypi.stackexchange.com/a/111787/120469).
+
+* Install the dependencies and jackcast - this will ask you for a hostname to set on the rpi - the default is jackcask
+
+* **IMPORTANT NOTE** - please plug in the usb sound card (specifically the Behringer UCA202 - as pulse audio doesn't seem to be able to pick it up if its not plugged in after the install)
 ```
 wget https://raw.githubusercontent.com/wil3/jackcast/master/platforms/ubuntu/install.sh .
 chmod +x install.sh
 sudo install.sh
 ```
-* Clone the repo and install Jackcast
-```
-sudo mkdir -p /srv/www
-cd /srv/www
-sudo git clone https://github.com/wil3/jackcast.git
-sudo chown -R $USER:$USER jackcast
-cd jackcast
-sudo apt-get install python3-venv
-python3 -m venv env
-source env/bin/activate
-pip3 install wheel # Is needed by gevent
-pip3 install .
-```
-* Configure Nginx
-```
-sudo rm /etc/nginx/sites-enabled/default
-cp /srv/www/jackcast/platforms/ubuntu/etc/nginx/sites-available/jackcast
-/etc/nginx/sites-available/
-sudo ln -s /etc/nginx/sites-available/jackcast /etc/nginx/sites-enabled
-```
-* Install the Jackcast service 
-```
-sudo cp /srv/www/jackcast/platforms/ubuntu/etc/systemd/user/jackcast.service
-/etc/systemd/user/
-```
 * Reboot
 ```
 sudo reboot
 ```
-* Jack cast should now be accessible by a browser at `jackcast.local`. 
+* Jack cast should now be accessible by a browser at `jackcast.local`. (If you used the default hostname - please replace `jackcast` with what ever hostname you set during install)
 
-Note this has only been tested on Android 10 Firefox 68.8.1, and Ubuntu 18.04
-Firefox 69.0.2. I have experienced issues not being able to resolve the local
-domain via mDNS on Android 6. In this case you need to access by IP address.
+**Note**: *this has only been tested on Android 10 Firefox 68.8.1, and Ubuntu 18.04 Firefox 69.0.2. I have experienced issues not being able to resolve the local domain via mDNS on Android 6. In this case you need to access by IP address.*
 
 ## Stack
 * Raspberry Pi 4
@@ -98,3 +70,11 @@ domain via mDNS on Android 6. In this case you need to access by IP address.
 Total Cost: $55.47
 
 ![Jackcast](https://github.com/wil3/jackcast/blob/master/.github/images/pi-jackcast.jpg)
+
+## Alternative Sound Card
+
+| Price   | Item                                                         |
+| ------- | ------------------------------------------------------------ |
+| $ 28.43 | [Behringer UCA202 U-Control Ultra low-latency 2 In/2 Out USB/Audio Interface](https://www.amazon.com/BEHRINGER-Box-RCA-Phono-UCA202/dp/B000KW2YEI/ref=sr_1_2?keywords=Behringer+UCA202+U-Control+Ultra+low-latency+2+In%2F2+Out+USB%2FAudio+Interface&qid=1637553736&sr=8-2) |
+
+As per https://github.com/wil3/jackcast/issues/10 @**[dangermouse69](https://github.com/dangermouse69)** found that this USB sound card has beter sound quality and it is plug and play.
